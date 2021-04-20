@@ -1,7 +1,6 @@
 require 'oystercard'
 
 describe Oystercard do
-
     before :each do
         @card = Oystercard.new(5)
     end
@@ -23,5 +22,10 @@ describe Oystercard do
             end
         end
     end
-
+    describe '#deduct' do
+        it 'deducts money from the balance' do
+            @card.deduct(2)
+            expect(@card.balance).to eq 3
+        end
+    end
 end
