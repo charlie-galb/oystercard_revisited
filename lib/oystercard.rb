@@ -18,7 +18,7 @@ class Oystercard
     end
 
     def in_journey?
-        @in_journey
+        @current_entry_station ? true : false
     end
 
     def touch_in(entry_station)
@@ -30,6 +30,7 @@ class Oystercard
     def touch_out
         @in_journey = false
         deduct
+        @current_entry_station = nil
     end
 
     private 
