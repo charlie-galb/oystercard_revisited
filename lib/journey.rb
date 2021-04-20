@@ -22,4 +22,12 @@ class Journey
         @exit_station ? MINIMUM_FARE : PENALTY_FARE
     end
 
+    def in_progress?
+        if @entry_station && !@exit_station
+            true
+        else
+            false
+        end
+    end
+
 end
