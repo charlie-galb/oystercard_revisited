@@ -17,6 +17,25 @@ describe Journey do
             expect(subject.exit_station).to eq brixton_station
         end
     end
+    describe '#in_progress?' do
+        context 'when there is an entry station but no exit station' do
+            it 'returns true' do
+                subject.log_entry(brixton_station)
+                expect(subject.in_progress?).to eq true
+            end
+        end
+        context 'when there is no entry station or exit station' do
+            it 'returns false' do
+                expect(subject.in_progress?).to eq false
+            end
+        end
+        context 'when there is an exit station but no entry station' do
+            it 'returns true' do
+                subject.log_exit(brixton_station)
+                expect(subject.in_progress?).to eq false
+            end
+        end
+    end
     describe '#fare' do
         context 'when there is no exit station' do
             it 'charges the penalty fare' do
