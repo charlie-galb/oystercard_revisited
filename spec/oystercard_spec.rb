@@ -22,12 +22,6 @@ describe Oystercard do
             end
         end
     end
-    describe '#deduct' do
-        it 'deducts money from the balance' do
-            @card.deduct(2)
-            expect(@card.balance).to eq -2
-        end
-    end
     describe '#in_journey?' do
         context 'when the user is not in transit' do
             it 'returns false' do
@@ -56,6 +50,11 @@ describe Oystercard do
             expect(@card.in_journey?).to eq true
             @card.touch_out
             expect(@card.in_journey?).to eq false
+        end
+        it 'deducts the correct fare from the balance' do
+            @card.top_up(5)
+            @card.touch_in
+            expect {@card.touch_out}.to change{@card.balance}.by(-1)
         end
     end
 end
