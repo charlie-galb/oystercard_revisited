@@ -6,11 +6,12 @@ describe Journey do
     let(:brixton_station) {double('fake exit station', :name => 'Brixton', :zone => 2)}
 
     before :each do
-        @journey = Journey.new(barnet_station)
+        @journey = Journey.new
     end
 
     describe '#entry_station' do
         it 'knows its entry station' do
+            @journey.log_entry(barnet_station)
             expect(@journey.entry_station).to eq barnet_station
         end
     end
@@ -23,6 +24,7 @@ describe Journey do
     describe '#fare' do
         context 'when there is no exit station' do
             it 'charges the penalty fare' do
+                @journey.log_entry(barnet_station)
                 expect(@journey.fare).to eq 6
             end
         end
