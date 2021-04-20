@@ -43,7 +43,7 @@ describe Oystercard do
             it 'stores the entry station' do
                 @card.top_up(3)
                 @card.touch_in(entry_station)
-                expect(@card.current_entry_station).to eq 'High Barnet'
+                expect(@card.entry_station).to eq 'High Barnet'
             end
         end
         context 'when there is insufficient balance on the card' do
@@ -65,11 +65,11 @@ describe Oystercard do
             @card.touch_in(entry_station)
             expect {@card.touch_out}.to change{@card.balance}.by(-1)
         end
-        it 'setes the current_entry_station to nil' do
+        it 'setes the entry_station to nil' do
             @card.top_up(5)
             @card.touch_in(entry_station)
             @card.touch_out
-            expect(@card.current_entry_station).to eq nil
+            expect(@card.entry_station).to eq nil
         end
     end
 end
