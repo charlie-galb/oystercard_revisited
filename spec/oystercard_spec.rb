@@ -65,5 +65,11 @@ describe Oystercard do
             @card.touch_in(entry_station)
             expect {@card.touch_out}.to change{@card.balance}.by(-1)
         end
+        it 'setes the current_entry_station to nil' do
+            @card.top_up(5)
+            @card.touch_in(entry_station)
+            @card.touch_out
+            expect(@card.current_entry_station).to eq nil
+        end
     end
 end
