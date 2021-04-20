@@ -35,4 +35,10 @@ describe Oystercard do
             end
         end
     end
+    describe '#touch_in' do
+        it 'changes the in_journey status to true' do
+            @card.touch_in
+            expect(@card.in_journey?).to eq true
+        end
+    end
 end
