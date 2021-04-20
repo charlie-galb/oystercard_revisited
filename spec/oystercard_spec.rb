@@ -3,6 +3,7 @@ require 'oystercard'
 describe Oystercard do
 
     let(:barnet_station) {double('fake entry station', :name => 'High Barnet')}
+    let(:brixton_station) {double('fake exit station', :name => 'Brixton')}
 
     before :each do
         @card = Oystercard.new(0)
@@ -43,7 +44,8 @@ describe Oystercard do
             it 'stores the entry station' do
                 @card.top_up(3)
                 @card.touch_in(barnet_station)
-                expect(@card.entry_station).to eq 'High Barnet'
+                expect(@card.travel_history[0].length).to eq 1
+                expect(@card.travel_history[0][:entry].name).to eq 'High Barnet'
             end
         end
         context 'when there is insufficient balance on the card' do
@@ -57,19 +59,20 @@ describe Oystercard do
             @card.top_up(5)
             @card.touch_in(barnet_station)
             expect(@card.in_journey?).to eq true
-            @card.touch_out
+            @card.touch_out(brixton_station)
             expect(@card.in_journey?).to eq false
         end
         it 'deducts the correct fare from the balance' do
             @card.top_up(5)
             @card.touch_in(barnet_station)
-            expect {@card.touch_out}.to change{@card.balance}.by(-1)
+            expect {@card.touch_out(brixton_station)}.to change{@card.balance}.by(-1)
         end
-        it 'setes the entry_station to nil' do
+        it 'adds the exit station to the travel_history' do
             @card.top_up(5)
             @card.touch_in(barnet_station)
-            @card.touch_out
-            expect(@card.entry_station).to eq nil
+            @card.touch_out(brixton_station)
+            expect(@card.travel_history[0].length).to eq 2
+            expect(@card.travel_history[0][:exit].name).to eq 'Brixton'
         end
     end
 end
