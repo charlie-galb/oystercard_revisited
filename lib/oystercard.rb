@@ -3,6 +3,7 @@ class Oystercard
 
     MAX_BALANCE = 90
     MIN_BALANCE = 1
+    STANDARD_FARE = 1
 
 
     def initialize(balance)
@@ -13,10 +14,6 @@ class Oystercard
     def top_up(amount)
         fail_if_max_exceeded(amount)
         @balance += amount
-    end
-
-    def deduct(amount)
-        @balance -= amount
     end
 
     def in_journey?
@@ -30,16 +27,21 @@ class Oystercard
 
     def touch_out
         @in_journey = false
+        deduct
     end
 
     private 
 
-    def fail_if_max_exceeded(increase)
-        raise "Maximum balance exceeded!" if increase + @balance > MAX_BALANCE
+    def deduct
+        @balance -= STANDARD_FARE
     end
 
     def fail_if_below_min
         raise "Insufficient balance on card!" if @balance < MIN_BALANCE
+    end
+
+    def fail_if_max_exceeded(increase)
+        raise "Maximum balance exceeded!" if increase + @balance > MAX_BALANCE
     end
     
 end
