@@ -19,7 +19,11 @@ class Journey
     end
 
     def fare
-        @exit_station ? MINIMUM_FARE : PENALTY_FARE
+        if (@exit_station && !@entry_station) || (!@exit_station && @entry_station)
+            PENALTY_FARE
+        else
+            MINIMUM_FARE 
+        end
     end
 
     def in_progress?
