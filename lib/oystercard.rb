@@ -25,6 +25,10 @@ class Oystercard
         @in_journey = true
     end
 
+    def touch_out
+        @in_journey = false
+    end
+
     private 
 
     def fail_if_max_exceeded(increase)
