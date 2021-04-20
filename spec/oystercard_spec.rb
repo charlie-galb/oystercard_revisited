@@ -45,8 +45,8 @@ describe Oystercard do
                 expect(@card.travel_history.length).to eq 0
                 @card.top_up(3)
                 @card.touch_in(barnet_station)
-                expect(@card.travel_history[0].length).to eq 1
-                expect(@card.travel_history[0][:entry].name).to eq 'High Barnet'
+                expect(@card.current_journey.entry_station).to eq barnet_station
+                expect(@card.current_journey.exit_station).to eq nil
             end
         end
         context 'when there is insufficient balance on the card' do
@@ -72,8 +72,12 @@ describe Oystercard do
             @card.top_up(5)
             @card.touch_in(barnet_station)
             @card.touch_out(brixton_station)
-            expect(@card.travel_history[0].length).to eq 2
-            expect(@card.travel_history[0][:exit].name).to eq 'Brixton'
+            expect(@card.travel_history[0].exit_station).to eq brixton_station
+        end
+        context 'when the user has forgotten to touch in' do
+            it 'deducts the penalty fare from the balance' do
+                expect {@card.touch_out(brixton_station)}.to change{@card.balance}.by(-1)
+            end
         end
     end
 end
