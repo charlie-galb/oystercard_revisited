@@ -1,15 +1,16 @@
+require 'journey'
+require 'station'
+
 class Oystercard
-    attr_reader :balance, :travel_history
+    attr_reader :balance, :travel_history, :current_journey
 
     MAX_BALANCE = 90
     MIN_BALANCE = 1
-    STANDARD_FARE = 1
 
 
     def initialize(balance)
         @balance = balance
-        @in_journey = false
-        @entry_station = nil
+        @current_journey = Journey.new
         @travel_history = []
     end
 
@@ -19,29 +20,32 @@ class Oystercard
     end
 
     def in_journey?
-        if @travel_history[0] && @travel_history[0].length == 1
-            true
-        else
-            false
-        end
+        @current_journey.in_progress?
     end
 
     def touch_in(entry_station)
+        check_for_unfinished_journey
         fail_if_below_min
         @in_journey = true
-        @travel_history << {entry: entry_station}
+        @current_journey = Journey.new
+        @current_journey.log_entry(entry_station)
     end
 
     def touch_out(exit_station)
-        @in_journey = false
+        @current_journey.log_exit(exit_station)
         deduct
-        @travel_history[0][:exit] = exit_station
+        @travel_history << @current_journey
+        @current_journey = Journey.new
     end
 
     private 
 
     def deduct
-        @balance -= STANDARD_FARE
+        @balance -= @current_journey.fare
+    end
+
+    def check_for_unfinished_journey
+        deduct if @current_journey.entry_station
     end
 
     def fail_if_below_min
