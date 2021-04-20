@@ -42,6 +42,7 @@ describe Oystercard do
                 expect(@card.in_journey?).to eq true
             end
             it 'stores the entry station' do
+                expect(@card.travel_history.length).to eq 0
                 @card.top_up(3)
                 @card.touch_in(barnet_station)
                 expect(@card.travel_history[0].length).to eq 1
