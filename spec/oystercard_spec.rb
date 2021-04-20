@@ -28,4 +28,11 @@ describe Oystercard do
             expect(@card.balance).to eq 3
         end
     end
+    describe '#in_journey?' do
+        context 'when the user is not in transit' do
+            it 'returns false' do
+                expect(@card.in_journey?).to eq false
+            end
+        end
+    end
 end
