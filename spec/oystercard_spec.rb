@@ -11,9 +11,17 @@ describe Oystercard do
         end
     end
     describe '#top_up' do
-        it 'adds money to balance' do
-            @card.top_up(3)
-            expect(@card.balance).to eq 8
+        context 'when the amount will not push the balance above the card limit' do
+            it 'adds money to balance' do
+                @card.top_up(3)
+                expect(@card.balance).to eq 8
+            end
+        end
+        context 'when the amount will not push the balance above the card limit' do
+            it 'adds money to balance' do
+                expect{@card.top_up(90)}.to raise_error(/Maximum balance exceeded!/)
+            end
         end
     end
+
 end
