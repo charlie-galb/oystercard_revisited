@@ -1,4 +1,5 @@
 require 'journey'
+require 'journey_log'
 require 'station'
 
 class Oystercard
@@ -10,8 +11,7 @@ class Oystercard
 
     def initialize(balance)
         @balance = balance
-        @current_journey = Journey.new
-        @travel_history = []
+        @travel_log = JourneyLog.new(journey_class: Journey)
     end
 
     def top_up(amount)
@@ -19,33 +19,25 @@ class Oystercard
         @balance += amount
     end
 
-    def in_journey?
-        @current_journey.in_progress?
-    end
-
     def touch_in(entry_station)
         check_for_unfinished_journey
         fail_if_below_min
-        @in_journey = true
-        @current_journey = Journey.new
-        @current_journey.log_entry(entry_station)
+        @travel_log.start(entry_station)
     end
 
     def touch_out(exit_station)
-        @current_journey.log_exit(exit_station)
+        @travel_log.finish(exit_station)
         deduct
-        @travel_history << @current_journey
-        @current_journey = Journey.new
     end
 
     private 
 
     def deduct
-        @balance -= @current_journey.fare
+        @balance -= @travel_log.current_fare
     end
 
     def check_for_unfinished_journey
-        deduct if @current_journey.entry_station
+        deduct if @travel_log.in_transit?
     end
 
     def fail_if_below_min
