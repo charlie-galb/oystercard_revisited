@@ -54,6 +54,13 @@ describe Oystercard do
                 expect{@card.touch_in(barnet_station)}.to raise_error(/Insufficient balance on card!/)
             end
         end
+        context 'when the user has forgotten to touch out' do
+            it 'deducts the penalty fare from the balance' do
+                @card.top_up(20)
+                @card.touch_in(barnet_station)
+                expect {@card.touch_in(brixton_station)}.to change{@card.balance}.by(-6)
+            end
+        end
     end
     describe '#touch_out' do
         it 'changes the in_journey status to false' do
