@@ -9,4 +9,9 @@ describe Journey do
         journey = Journey.new(barnet_station)
         expect(journey.entry_station).to eq barnet_station
     end
+    it 'knows its exit_station' do
+        journey = Journey.new(barnet_station)
+        journey.log_exit(brixton_station)
+        expect(journey.exit_station).to eq brixton_station
+    end
 end
