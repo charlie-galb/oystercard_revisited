@@ -41,4 +41,12 @@ describe Oystercard do
             expect(@card.in_journey?).to eq true
         end
     end
+    describe '#touch_out' do
+        it 'changes the in_journey status to false' do
+            @card.touch_in
+            expect(@card.in_journey?).to eq true
+            @card.touch_out
+            expect(@card.in_journey?).to eq false
+        end
+    end
 end
