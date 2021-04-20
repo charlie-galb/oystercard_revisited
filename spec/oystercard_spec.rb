@@ -2,8 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
 
-    let(:barnet_station) {double('fake entry station', :name => 'High Barnet')}
-    let(:brixton_station) {double('fake exit station', :name => 'Brixton')}
+    let(:barnet_station) {double('fake entry station', :name => 'High Barnet', :zone => 5)}
+    let(:brixton_station) {double('fake exit station', :name => 'Brixton', :zone => 2)}
 
     before :each do
         @card = Oystercard.new(0)
