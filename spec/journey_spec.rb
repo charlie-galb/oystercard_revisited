@@ -43,5 +43,22 @@ describe Journey do
                 expect(subject.fare).to eq 6
             end
         end
+        context 'when there is no entry station' do
+            it 'charges the penalty fare' do
+                subject.log_exit(barnet_station)
+                expect(subject.fare).to eq 6
+            end
+        end
+        context 'when there is an entry station and an exit station' do
+            it 'calculates the penalty based on zones crossed' do
+                subject.log_entry(brixton_station)
+                subject.log_exit(barnet_station)
+                expect(subject.fare).to eq 4
+                new_journey = Journey.new
+                new_journey.log_entry(barnet_station)
+                new_journey.log_exit(barnet_station)
+                expect(new_journey.fare).to eq 1
+            end
+        end
     end
 end

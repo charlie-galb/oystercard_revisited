@@ -43,9 +43,12 @@ describe Oystercard do
     end
     describe '#touch_out' do
         it 'deducts the correct fare from the balance' do
-            @card.top_up(5)
+            @card.top_up(20)
             @card.touch_in(barnet_station)
-            expect {@card.touch_out(brixton_station)}.to change{@card.balance}.by(-1)
+            expect {@card.touch_out(brixton_station)}.to change{@card.balance}.by(-4)
+            @card.touch_in(barnet_station)
+            expect {@card.touch_out(barnet_station)}.to change{@card.balance}.by(-1)
+
         end
         context 'when the user has forgotten to touch in' do
             it 'deducts the penalty fare from the balance' do
