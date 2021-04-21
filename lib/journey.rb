@@ -22,7 +22,7 @@ class Journey
         if (@exit_station && !@entry_station) || (!@exit_station && @entry_station)
             PENALTY_FARE
         else
-            MINIMUM_FARE 
+            MINIMUM_FARE + (entry_station.zone - exit_station.zone).abs
         end
     end
 
